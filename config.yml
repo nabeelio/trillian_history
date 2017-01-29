@@ -3,7 +3,7 @@
 #
 
 general:
-  timezone: US/Central
+  timezone: US/Eastern
   working_dir: tmp
   output_dir: output
   exclude_users:

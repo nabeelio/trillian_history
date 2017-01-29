@@ -5,6 +5,7 @@ from setuptools import setup
 requires = (
     'addict==0.4.0',
     'arrow==0.8.0',
+    'beautifulsoup4==4.5.3',
     'html5lib==0.9999999',
     'jinja2==2.8',
     'pelican==3.7.1',

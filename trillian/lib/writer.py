@@ -5,26 +5,27 @@ import arrow
 import codecs
 import logging
 import shutil
+from trillian.app import App
 from trillian.templates import Templates
 from collections import namedtuple
 
 LOG = logging.getLogger('trillian.lib.writer')
 
 Contact = namedtuple('Contact', ['username', 'print_name'])
-Line = namedtuple('Line', ['user', 'text', 'timestamp', 'date'])
+Line = namedtuple('Line', ['type', 'text', 'time'])
 
 
 class Writer(object):
 
-    def __init__(self, me, contact, args, config):
+    def __init__(self, me, contact):
         """  """
         self.me = me
         self.contact = contact
-        self.args = args
-        self.config = config
+        self.args = App().args
+        self.config = App().config
 
-        if not hasattr(self.contact, 'username'):
-            self.contact.username = self.contact.print_name
+        if not getattr(self.contact, 'print_name'):
+            self.contact.print_name = self.contact.username
 
         self.fp = None
         self.tpl = Templates()
@@ -51,11 +52,12 @@ class Writer(object):
         """
         new_file = False
 
-        dt = arrow.get(line.date).to(self.config.general.timezone)
+        dt = arrow.get(float(line.time) / 1e3)
+        dt = dt.to(self.config.general.timezone)
 
-        wdir = '{wd}/{cli}'.format(
-            cli=self.contact.username,
+        wdir = '{wd}/content/category/{cli}'.format(
             wd=self.config.general.working_dir,
+            cli=self.contact.username,
         )
 
         os.makedirs(wdir, exist_ok=True)
@@ -88,6 +90,7 @@ class Writer(object):
 
         fname, new_file = self._get_filename(tpl, lines[0])
         fp, newly_opened = self._open_fp(fname)
+
         lines = self.tpl.render(tpl,
                                 contact=self.contact,
                                 lines=lines,

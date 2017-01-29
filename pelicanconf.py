@@ -1,25 +1,28 @@
 #
 
 AUTHOR = ''
-SITENAME = 'telegram logs'
+SITENAME = 'trillian logs'
 SITEURL = 'index.html'
 
 # options are taken/set from there as well
-THEME = '../pelican-themes/Flex'
-CUSTOM_CSS = 'main.css'
+THEME = 'pelican-theme/pelican-elegant-1.3'
+# CUSTOM_CSS = 'main.css'
 
 PATH = 'tmp/'
 
 # general settings
-MAIN_MENU = False
+MAIN_MENU = True
 TYPOGRIFY = True
 TIMEZONE = 'US/Central'
 USE_FOLDER_AS_CATEGORY = True
-DELETE_OUTPUT_DIRECTORY = True
+DELETE_OUTPUT_DIRECTORY = False
 
 DISPLAY_PAGES_ON_MENU = True
 DISPLAY_CATEGORIES_ON_MENU = True
 DISPLAY_ARTICLE_INFO_ON_INDEX = True
+
+PLUGIN_PATHS = ['pelican-plugins']
+PLUGINS = ['autopages', 'tipue_search', 'sitemap']
 
 FORMATTED_FIELDS = [
     'summary'
