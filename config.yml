@@ -4,6 +4,7 @@
 
 general:
   timezone: US/Eastern
+  source_dir: ~/Dropbox/documents/logs/trillian/logs
   working_dir: tmp
   output_dir: output
   exclude_users:

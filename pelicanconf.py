@@ -5,7 +5,7 @@ SITENAME = 'trillian logs'
 SITEURL = 'index.html'
 
 # options are taken/set from there as well
-THEME = 'pelican-theme/pelican-elegant-1.3'
+THEME = 'pelican/themes/pelican-elegant-1.3'
 # CUSTOM_CSS = 'main.css'
 
 PATH = 'tmp/'
@@ -21,20 +21,12 @@ DISPLAY_PAGES_ON_MENU = True
 DISPLAY_CATEGORIES_ON_MENU = True
 DISPLAY_ARTICLE_INFO_ON_INDEX = True
 
-PLUGIN_PATHS = ['pelican-plugins']
+PLUGIN_PATHS = ['pelican/plugins']
 PLUGINS = ['autopages', 'tipue_search', 'sitemap']
 
-FORMATTED_FIELDS = [
-    'summary'
-]
-
-STATIC_PATHS = [
-    'static/'  # relative to tmp/
-]
-
-LINKS = [
-    ('users', 'categories.html')
-]
+# FORMATTED_FIELDS = [
+#     'summary'
+# ]
 
 # default theme: https://github.com/getpelican/pelican-themes/tree/master/pelican-bootstrap3
 # this theme allows you to chose a sub-theme

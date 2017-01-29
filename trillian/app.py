@@ -6,12 +6,9 @@ import argparse
 from os import path
 from addict import Dict
 
-from .lib.singleton import Singleton
+from .log import init
 
-logging.basicConfig(format='%(asctime)s - '
-                           '%(name)s:%(lineno)d - '
-                           '%(levelname)s - %(message)s',
-                    level=logging.INFO)
+from .lib.singleton import Singleton
 
 LOG = logging.getLogger(__name__)
 
@@ -19,6 +16,7 @@ LOG = logging.getLogger(__name__)
 class App(object, metaclass=Singleton):
 
     def __init__(self):
+        """ """
         self._args = None
         self._config = None
 
@@ -30,14 +28,28 @@ class App(object, metaclass=Singleton):
             return self._args
 
         parser = argparse.ArgumentParser()
-        parser.add_argument('--conf', default='config.yml')
-        parser.add_argument('--log-level', default='DEBUG')
-        parser.add_argument('--test-mode', default=False, action='store_true')
 
-        parser.add_argument('--logs-source', default=None)
-        parser.add_argument('--dest', default='tmp/')
+        parser.add_argument('--conf',
+                            default='config.yml')
+
+        parser.add_argument('--log-level',
+                            default='DEBUG')
+
+        parser.add_argument('--test-mode',
+                            default=False,
+                            action='store_true')
+
+        parser.add_argument('--logs-source',
+                            default=None)
+
+        parser.add_argument('--dest',
+                            default='tmp/')
 
         self._args = parser.parse_args()
+
+        # some formatting
+        self._args.log_level = self._args.log_level.upper()
+
         return self._args
 
     @property
@@ -79,18 +91,28 @@ class App(object, metaclass=Singleton):
 
     def run(self):
         """ application entry point """
+        init(self.args.log_level, 'FATAL',
+             include_timestamp=False)
+
         LOG.info(self.args)
         LOG.info(self.config)
 
-        # set the proper log level
-        self.args.log_level = self.args.log_level.upper()
-        LOG.setLevel(getattr(logging, self.args.log_level))
+        # figure out where we're reading from
+        log_source = self.args.logs_source
+        if not log_source:
+            self.args.logs_source = self.config.general.source_dir
 
         self.args.logs_source = os.path.expanduser(self.args.logs_source)
         if not os.path.exists(self.args.logs_source):
             print('Log directory does not exist!')
             exit(-1)
 
+        # and where to write to
+        dest = self.args.dest
+        if not dest:
+            self.args.dest = self.config.general.working_dir
+
+        # now werk, werk, werk
         from trillian.history import TrillianHistory
         history = TrillianHistory()
         history.run()
